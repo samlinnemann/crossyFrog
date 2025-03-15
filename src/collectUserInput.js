@@ -45,6 +45,7 @@ window.addEventListener("touchend", (event) => {
 });
 
 window.addEventListener("click", () => {
+    queueMove("forward");
 });
 
 
