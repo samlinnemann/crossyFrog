@@ -6,7 +6,7 @@ export function Cargo(tileIndex, height) {
     cargo.position.x = tileIndex * tileSize;
 
     const frame = new THREE.Mesh(
-        new THREE.BoxGeometry(15, 15, 20),
+        new THREE.BoxGeometry(20, 20, 20),
         new THREE.MeshLambertMaterial({
             color: 0x4d2926,
             flatShading: true,

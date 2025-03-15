@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { generateRows } from "../utilities/generateRows";
 import { Grass } from "./Grass";
 import { Road } from "./Road";
-import { Tree } from "./Tree";
+import { Cargo } from "./Box";
 import { Car } from "./Car";
 import { Truck } from "./Truck";
 
@@ -37,7 +37,7 @@ export function addRows() {
             const row = Grass(rowIndex);
 
             rowData.trees.forEach(({ tileIndex, height }) => {
-                const three = Tree(tileIndex, height);
+                const three = Cargo(tileIndex, height);
                 row.add(three);
             });
 
@@ -51,7 +51,8 @@ export function addRows() {
                 const car = Car(
                     vehicle.initialTileIndex,
                     rowData.direction,
-                    vehicle.color
+                    vehicle.color,
+                    vehicle.color2
                 );
                 vehicle.ref = car;
                 row.add(car);

@@ -1,9 +1,8 @@
 import * as THREE from "three";
 import { tileSize } from "../constants";
 
-export function Car(initialTileIndex, direction, color) {
+export function Car(initialTileIndex, direction, color, color2) {
     const car = new THREE.Group();
-    let color2 = "";
     car.position.x = initialTileIndex * tileSize;
     if (!direction) car.rotation.z = Math.PI;
 
@@ -42,7 +41,7 @@ export function Car(initialTileIndex, direction, color) {
     const window = new THREE.Mesh(
         new THREE.BoxGeometry(15, 12, 5),
         new THREE.MeshLambertMaterial({ 
-            color: "purple",
+            color: color2,
             flatShading: true })
     );
     window.position.x = 10;
@@ -54,7 +53,7 @@ export function Car(initialTileIndex, direction, color) {
     const window2 = new THREE.Mesh(
         new THREE.BoxGeometry(20, 6, 5),
         new THREE.MeshLambertMaterial({ 
-            color: "purple", 
+            color: color2, 
             flatShading: true })
     );
     window2.position.x = 15;
@@ -101,7 +100,7 @@ export function Car(initialTileIndex, direction, color) {
     const backLeftWing = new THREE.Mesh(
         new THREE.BoxGeometry(20, 4, 10),
         new THREE.MeshLambertMaterial({
-            color: "purple",
+            color: color2,
             flatShading: false
         })
     );
@@ -113,7 +112,7 @@ export function Car(initialTileIndex, direction, color) {
     const backRightWing = new THREE.Mesh(
         new THREE.BoxGeometry(20, 4, 10),
         new THREE.MeshLambertMaterial({
-            color: "purple",
+            color: color2,
             flatShading: true
         })
     );

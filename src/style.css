@@ -1,6 +1,7 @@
 body {
   margin: 0;
   display: flex;
+  background-color: #000000;
 }
 
 #score {

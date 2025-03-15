@@ -57,8 +57,13 @@ function generateCarLaneMetadata() {
         occupiedTiles.add(initialTileIndex + 1);
 
         const color = randomElement(["yellow", "white"]);
+        let color2 = "purple"; // Default value
 
-        return { initialTileIndex, color };
+        if (color === "white") {
+            color2 = "#1DC300";
+        }
+
+        return { initialTileIndex, color, color2 };
     });
 
     return { type: "car", direction, speed, vehicles};
