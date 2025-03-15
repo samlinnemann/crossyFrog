@@ -31,17 +31,36 @@ let touchStartX = 0;
 let touchStartY = 0;
 let touchEndX = 0;
 let touchEndY = 0;
+let touchStartedOnGameArea = false;
+
+const gameArea = document.getElementById("game");
+const restartButton = document.getElementById("retry");
 
 window.addEventListener("touchstart", (event) => {
-    touchStartX = event.touches[0].clientX;
-    touchStartY = event.touches[0].clientY;
+    if (event.target === restartButton) {
+        return; // Don't register a swipe if touching the restart button
+    }
+
+    if (gameArea.contains(event.target)) {
+        touchStartedOnGameArea = true;
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+    }
 }, { passive: false });
 
 window.addEventListener("touchend", (event) => {
+    if (!touchStartedOnGameArea) return; // Ignore swipes that didn’t start in the game area
+
     touchEndX = event.changedTouches[0].clientX;
     touchEndY = event.changedTouches[0].clientY;
     
     handleGesture();
+    touchStartedOnGameArea = false; // Reset flag
+});
+
+restartButton.addEventListener("click", (event) => {
+    event.stopPropagation(); // Prevent the click from triggering other events
+    restartGame(); // Call your restart function here
 });
 
 function handleGesture() {
