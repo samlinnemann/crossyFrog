@@ -1,8 +1,18 @@
 import { queueMove } from "./components/Player";
 
+// Prevent scrolling when swiping
+document.addEventListener("touchstart", (event) => {
+    event.preventDefault();
+}, { passive: false });
+
+document.addEventListener("touchmove", (event) => {
+    event.preventDefault();
+}, { passive: false });
+
+// Keyboard Controls
 window.addEventListener("keydown", (event) => {
     if (event.key === "ArrowUp") {
-        event.preventDefault(); //avoids page scroll
+        event.preventDefault();
         queueMove("forward");
     } else if (event.key === "ArrowDown") {
         event.preventDefault();
@@ -27,19 +37,11 @@ window.addEventListener("touchstart", (event) => {
     touchStartY = event.touches[0].clientY;
 }, { passive: false });
 
-window.addEventListener("touchmove", (event) => {
-    event.preventDefault(); // Prevent page scrolling
-}, { passive: false });
-
 window.addEventListener("touchend", (event) => {
     touchEndX = event.changedTouches[0].clientX;
     touchEndY = event.changedTouches[0].clientY;
     
     handleGesture();
-});
-
-window.addEventListener("click", () => {
-    queueMove("forward"); // Tap to move forward
 });
 
 function handleGesture() {
