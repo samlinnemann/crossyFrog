@@ -24,13 +24,14 @@ body {
   align-items: center;
   justify-content: center;
   visibility: hidden;
+  background-color: black;
 }
 
 #result {
   display: flex;
   flex-direction: column;
   align-items: center;
-  background-color: none;
+  background-color: black;
   color: white;
 }
 
