@@ -25,12 +25,16 @@ let touchEndY = 0;
 window.addEventListener("touchstart", (event) => {
     touchStartX = event.touches[0].clientX;
     touchStartY = event.touches[0].clientY;
-});
+}, { passive: false });
+
+window.addEventListener("touchmove", (event) => {
+    event.preventDefault(); // Prevent page scrolling
+}, { passive: false });
 
 window.addEventListener("touchend", (event) => {
     touchEndX = event.changedTouches[0].clientX;
     touchEndY = event.changedTouches[0].clientY;
-
+    
     handleGesture();
 });
 
