@@ -15,3 +15,46 @@ window.addEventListener("keydown", (event) => {
         queueMove("right");
     }
 });
+
+// Touch Controls
+let touchStartX = 0;
+let touchStartY = 0;
+let touchEndX = 0;
+let touchEndY = 0;
+
+window.addEventListener("touchstart", (event) => {
+    touchStartX = event.touches[0].clientX;
+    touchStartY = event.touches[0].clientY;
+});
+
+window.addEventListener("touchend", (event) => {
+    touchEndX = event.changedTouches[0].clientX;
+    touchEndY = event.changedTouches[0].clientY;
+
+    handleGesture();
+});
+
+window.addEventListener("click", () => {
+    queueMove("forward"); // Tap to move forward
+});
+
+function handleGesture() {
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+
+    if (Math.abs(deltaX) > Math.abs(deltaY)) {
+        // Horizontal swipe
+        if (deltaX > 30) {
+            queueMove("right"); // Swipe right
+        } else if (deltaX < -30) {
+            queueMove("left"); // Swipe left
+        }
+    } else {
+        // Vertical swipe
+        if (deltaY > 30) {
+            queueMove("backward"); // Swipe down
+        } else if (deltaY < -30) {
+            queueMove("forward"); // Swipe up
+        }
+    }
+}
