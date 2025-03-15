@@ -2,7 +2,7 @@ import * as THREE from "three";
 import { generateRows } from "../utilities/generateRows";
 import { Grass } from "./Grass";
 import { Road } from "./Road";
-import { Tree } from "./Box";
+import { Tree } from "./Tree";
 import { Car } from "./Car";
 import { Truck } from "./Truck";
 
