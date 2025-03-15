@@ -44,6 +44,10 @@ window.addEventListener("touchend", (event) => {
     handleGesture();
 });
 
+window.addEventListener("click", () => {
+});
+
+
 function handleGesture() {
     const deltaX = touchEndX - touchStartX;
     const deltaY = touchEndY - touchStartY;
