@@ -3,6 +3,7 @@ import { minTileIndex, maxTileIndex } from "../constants";
 
 export function generateRows(amount) {
     const rows = [];
+    generateForestMetadata();
     for (let i = 0; i < amount; i++) {
         const rowData = generateRow();
         rows.push(rowData);
