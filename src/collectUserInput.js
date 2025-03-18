@@ -44,10 +44,6 @@ window.addEventListener("touchend", (event) => {
     handleGesture();
 });
 
-window.addEventListener("click", () => {
-    queueMove("forward");
-});
-
 
 function handleGesture() {
     const deltaX = touchEndX - touchStartX;
