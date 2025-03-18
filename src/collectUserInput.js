@@ -32,11 +32,6 @@ let touchStartY = 0;
 let touchEndX = 0;
 let touchEndY = 0;
 
-window.addEventListener("touchstart", (event) => {
-    touchStartX = event.touches[0].clientX;
-    touchStartY = event.touches[0].clientY;
-}, { passive: false });
-
 window.addEventListener("touchend", (event) => {
     touchEndX = event.changedTouches[0].clientX;
     touchEndY = event.changedTouches[0].clientY;
