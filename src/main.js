@@ -29,7 +29,16 @@ const resultDOM = document.getElementById("result-container");
 
 initializeGame();
 
-document.querySelector("#retry")?.addEventListener("click", initializeGame);
+const retryButton = document.querySelector("#retry");
+
+if (retryButton) {
+    retryButton.addEventListener("click", initializeGame);
+    retryButton.addEventListener("touchend", (event) => {
+        event.preventDefault(); // Prevents ghost clicks
+        initializeGame();
+    });
+}
+
 
 function initializeGame() {
     initializePlayer();
