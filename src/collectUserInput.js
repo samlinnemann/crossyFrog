@@ -32,13 +32,20 @@ let touchStartY = 0;
 let touchEndX = 0;
 let touchEndY = 0;
 
-window.addEventListener("touchend", (event) => {
-    touchEndX = event.changedTouches[0].clientX;
-    touchEndY = event.changedTouches[0].clientY;
-    
-    handleGesture();
+window.addEventListener("touchstart", (event) => {
+    if (event.touches.length === 1) {
+        touchStartX = event.touches[0].clientX;
+        touchStartY = event.touches[0].clientY;
+    }
 });
 
+window.addEventListener("touchend", (event) => {
+    if (event.changedTouches.length === 1) {
+        touchEndX = event.changedTouches[0].clientX;
+        touchEndY = event.changedTouches[0].clientY;
+        handleGesture();
+    }
+});
 
 function handleGesture() {
     const deltaX = touchEndX - touchStartX;
@@ -57,6 +64,9 @@ function handleGesture() {
             queueMove("backward"); // Swipe down
         } else if (deltaY < -30) {
             queueMove("forward"); // Swipe up
+        } else {
+            // Tap detected (minimal vertical movement)
+            queueMove("forward");
         }
     }
 }
