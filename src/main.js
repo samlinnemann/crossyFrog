@@ -26,27 +26,72 @@ player.add(camera);
 
 const scoreDOM = document.getElementById("score");
 const resultDOM = document.getElementById("result-container");
+const finalScoreDOM = document.getElementById("final-score");
+let isGameOver = false; // Track game state
 
 initializeGame();
 
-document.querySelector("#retry")?.addEventListener("click", initializeGame);
+const retryButton = document.querySelector("#retry");
+
+if (retryButton) {
+    retryButton.addEventListener("click", initializeGame);
+    retryButton.addEventListener("touchend", (event) => {
+        event.preventDefault(); // Prevents ghost clicks
+        initializeGame();
+    });
+}
 
 function initializeGame() {
+    isGameOver = false; // Reset game state
     initializePlayer();
     initializeMap();
 
-    //UI initialization
+    // UI initialization
     if (scoreDOM) scoreDOM.innerText = "0";
     if (resultDOM) resultDOM.style.visibility = "hidden";
+
+    // Restart animation loop
+    renderer.setAnimationLoop(animate);
 }
- 
+
+function gameOver() {
+    isGameOver = true;
+    if (resultDOM) resultDOM.style.visibility = "visible";
+    if (finalScoreDOM) finalScoreDOM.innerText = player.position.currentRow.toString();
+    renderer.setAnimationLoop(null); // Stop animation loop
+}
+
 const renderer = Renderer();
 renderer.setAnimationLoop(animate);
 
 function animate() {
+    if (isGameOver) return; // Stop game updates if game over
+
     animateVehicles();
     animatePlayer();
     hitTest();
 
     renderer.render(scene, camera);
+}
+
+// Update hit detection to trigger game over
+export function hitTest() {
+    const row = rows[position.currentRow - 1];
+    if (!row) return;
+
+    if (row.type === "car" || row.type === "truck") {
+        const playerBoundingBox = new THREE.Box3();
+        playerBoundingBox.setFromObject(player);
+
+        row.vehicles.forEach(({ ref }) => {
+            if (!ref) throw Error("VEHICLE REFERENCE IS MISSING");
+
+            const vehicleBoundingBox = new THREE.Box3();
+            vehicleBoundingBox.setFromObject(ref);
+
+            if (playerBoundingBox.intersectsBox(vehicleBoundingBox)) {
+                gameOver();
+            }
+        });
+    }
 }
