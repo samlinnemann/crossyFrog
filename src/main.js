@@ -39,24 +39,25 @@ const retryButton = document.querySelector("#retry");
 
 if (retryButton) {
     retryButton.addEventListener("click", initializeGame);
-    retryButton.addEventListener("touchend", (event) => {
-        event.preventDefault(); // Prevents ghost clicks
-        initializeGame();
-    });
+    retryButton.addEventListener("touchend", initializeGame);
 }
 
 function initializeGame() {
-    isGameOver = false; // Reset game state
+    isGameOver = false; // Reset game state first
     initializePlayer();
     initializeMap();
 
-    // UI initialization
+    // Ensure UI is reset
     if (scoreDOM) scoreDOM.innerText = "0";
     if (resultDOM) resultDOM.style.visibility = "hidden";
 
     // Restart animation loop
-    renderer.setAnimationLoop(animate);
+    renderer.setAnimationLoop(() => {
+        isGameOver = false; // Ensure game is running
+        animate();
+    });
 }
+
 
 function gameOver() {
     isGameOver = true;
