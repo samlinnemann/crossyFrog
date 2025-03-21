@@ -6,7 +6,9 @@ import { player, initializePlayer } from "./components/Player";
 import { map, initializeMap } from "./components/map";
 import { animateVehicles } from "./animateVehicles";
 import { animatePlayer } from "./animatePlayer";
-import { hitTest } from "./hitTest";
+import { metadata as rows } from "./components/map";
+import { position } from "./components/Player";
+//import { hitTest } from "./hitTest";
 import "./style.css";
 import "./collectUserInput";
 
@@ -28,6 +30,8 @@ const scoreDOM = document.getElementById("score");
 const resultDOM = document.getElementById("result-container");
 const finalScoreDOM = document.getElementById("final-score");
 let isGameOver = false; // Track game state
+const renderer = Renderer();
+renderer.setAnimationLoop(animate);
 
 initializeGame();
 
@@ -56,13 +60,18 @@ function initializeGame() {
 
 function gameOver() {
     isGameOver = true;
+    
     if (resultDOM) resultDOM.style.visibility = "visible";
-    if (finalScoreDOM) finalScoreDOM.innerText = player.position.currentRow.toString();
+
+    // Ensure position and currentRow exist before accessing them
+    if (finalScoreDOM && position?.currentRow !== undefined) {
+        finalScoreDOM.innerText = position.currentRow.toString();
+    } else {
+        finalScoreDOM.innerText = "0"; // Fallback if position is undefined
+    }
+
     renderer.setAnimationLoop(null); // Stop animation loop
 }
-
-const renderer = Renderer();
-renderer.setAnimationLoop(animate);
 
 function animate() {
     if (isGameOver) return; // Stop game updates if game over

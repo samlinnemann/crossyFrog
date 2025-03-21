@@ -128,6 +128,8 @@ export function initializePlayer() {
 
   //clear moves queue
   movesQueue.length = 0;
+
+  
 }
 
 export function queueMove(direction) {
