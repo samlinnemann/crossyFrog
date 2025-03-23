@@ -38,8 +38,14 @@ initializeGame();
 const retryButton = document.querySelector("#retry");
 
 if (retryButton) {
-    retryButton.addEventListener("click", initializeGame);
-    retryButton.addEventListener("touchend", initializeGame);
+    retryButton.addEventListener("click", (e) => {
+        e.preventDefault(); // Prevent lingering touch event
+        initializeGame();
+    });
+    retryButton.addEventListener("touchstart", (e) => {
+        e.preventDefault(); // Prevent touch triggering unintended movement
+        initializeGame();
+    });
 }
 
 function initializeGame() {
@@ -52,10 +58,7 @@ function initializeGame() {
     if (resultDOM) resultDOM.style.visibility = "hidden";
 
     disableUserInput();
-    setTimeout(() => {
-        document.body.style.pointerEvents = "auto"; // Re-enable interactions after a short delay
-    }, 500); // Adjust duration as needed
-
+    
     // Restart animation loop
     renderer.setAnimationLoop(() => {
         isGameOver = false; // Ensure game is running
