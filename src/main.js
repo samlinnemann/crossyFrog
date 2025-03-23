@@ -51,30 +51,17 @@ function initializeGame() {
     if (scoreDOM) scoreDOM.innerText = "0";
     if (resultDOM) resultDOM.style.visibility = "hidden";
 
+    disableUserInput();
+    setTimeout(() => {
+        document.body.style.pointerEvents = "auto"; // Re-enable interactions after a short delay
+    }, 500); // Adjust duration as needed
+
     // Restart animation loop
     renderer.setAnimationLoop(() => {
         isGameOver = false; // Ensure game is running
         animate();
     });
 }
-
-/*
-function gameOver() {
-    isGameOver = true;
-    
-    if (resultDOM) resultDOM.style.visibility = "visible";
-
-    // Ensure position and currentRow exist before accessing them
-    if (finalScoreDOM && position?.currentRow !== undefined) {
-        finalScoreDOM.innerText = position.currentRow.toString();
-    } else {
-        finalScoreDOM.innerText = "0"; // Fallback if position is undefined
-    }
-
-    renderer.setAnimationLoop(null); // Stop animation loop
-}
-*/ 
-
 
 function animate() {
     if (isGameOver) return; // Stop game updates if game over
@@ -86,34 +73,6 @@ function animate() {
     renderer.render(scene, camera);
 }
 
-/*
-// Update hit detection to trigger game over
-export function hitTest() {
-    const row = rows[position.currentRow - 1];
-    if (!row) return;
-
-    if (row.type === "car" || row.type === "truck") {
-        const playerBoundingBox = new THREE.Box3();
-        playerBoundingBox.setFromObject(player);
-
-        row.vehicles.forEach(({ ref }) => {
-            if (!ref) throw Error("VEHICLE REFERENCE IS MISSING");
-
-            const vehicleBoundingBox = new THREE.Box3();
-            vehicleBoundingBox.setFromObject(ref);
-
-            if (playerBoundingBox.intersectsBox(vehicleBoundingBox)) {
-                gameOver();
-
-                if  (gameOver === true) {
-                    
-                }
-            }
-        });
-    }
-}
-*/
-
 export function hitTest() {
     const row = rows[position.currentRow - 1];
     if (!row) return;
@@ -150,12 +109,6 @@ function gameOver() {
     renderer.setAnimationLoop(null); // Stop animation loop
 }
 
-function handleControls(event) {
-    if (isGameOver) return; // Prevent movement if game is over
-    
-    // Your existing control handling logic here
-}
-
 // Ensure the gameOver button remains functional
 document.getElementById('gameOverButton')?.addEventListener('click', () => {
     if (isGameOver) {
@@ -163,3 +116,12 @@ document.getElementById('gameOverButton')?.addEventListener('click', () => {
         console.log('Game Over button pressed.');
     }
 });
+
+// Disable input for a brief period after restart
+function disableUserInput() {
+    document.body.style.pointerEvents = "none"; // Temporarily disable interactions
+
+    setTimeout(() => {
+        document.body.style.pointerEvents = "auto"; // Re-enable after 500ms
+    }, 500); // Adjust duration as needed
+}

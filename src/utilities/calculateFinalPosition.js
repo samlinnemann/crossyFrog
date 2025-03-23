@@ -1,25 +1,31 @@
 export function calculateFinalPosition(currentPosition, moves) {
-    return moves.reduce((position, direction) => {
-        if (direction === "forward")
+    if (moves.length === 0) return currentPosition;
+    
+    // Get the last move (most recent input)
+    const latestMove = moves[moves.length - 1];
+
+    switch (latestMove) {
+        case "forward":
             return {
-                rowIndex: position.rowIndex + 1, 
-                tileIndex: position.tileIndex,
+                rowIndex: currentPosition.rowIndex + 1,
+                tileIndex: currentPosition.tileIndex,
             };
-        if (direction === "backward")
+        case "backward":
             return {
-                rowIndex: position.rowIndex - 1,
-                tileIndex: position.tileIndex,
+                rowIndex: currentPosition.rowIndex - 1,
+                tileIndex: currentPosition.tileIndex,
             };
-        if (direction === "left")
+        case "left":
             return {
-                rowIndex: position.rowIndex,
-                tileIndex: position.tileIndex - 1,
+                rowIndex: currentPosition.rowIndex,
+                tileIndex: currentPosition.tileIndex - 1,
             };
-        if (direction === "right")
+        case "right":
             return {
-                rowIndex: position.rowIndex,
-                tileIndex: position.tileIndex + 1,
+                rowIndex: currentPosition.rowIndex,
+                tileIndex: currentPosition.tileIndex + 1,
             };
-        return position;
-    }, currentPosition);
+        default:
+            return currentPosition;
+    }
 }
