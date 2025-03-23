@@ -9,7 +9,7 @@ export function animatePlayer() {
 
     if (!moveClock.running) moveClock.start();
 
-    const stepTime = 0.2;
+    const stepTime = 0.15;
     const progress = Math.min(1, moveClock.getElapsedTime() / stepTime);
 
     setPosition(progress);

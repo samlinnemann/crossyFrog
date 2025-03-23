@@ -58,7 +58,7 @@ function initializeGame() {
     });
 }
 
-
+/*
 function gameOver() {
     isGameOver = true;
     
@@ -73,6 +73,8 @@ function gameOver() {
 
     renderer.setAnimationLoop(null); // Stop animation loop
 }
+*/ 
+
 
 function animate() {
     if (isGameOver) return; // Stop game updates if game over
@@ -84,7 +86,34 @@ function animate() {
     renderer.render(scene, camera);
 }
 
+/*
 // Update hit detection to trigger game over
+export function hitTest() {
+    const row = rows[position.currentRow - 1];
+    if (!row) return;
+
+    if (row.type === "car" || row.type === "truck") {
+        const playerBoundingBox = new THREE.Box3();
+        playerBoundingBox.setFromObject(player);
+
+        row.vehicles.forEach(({ ref }) => {
+            if (!ref) throw Error("VEHICLE REFERENCE IS MISSING");
+
+            const vehicleBoundingBox = new THREE.Box3();
+            vehicleBoundingBox.setFromObject(ref);
+
+            if (playerBoundingBox.intersectsBox(vehicleBoundingBox)) {
+                gameOver();
+
+                if  (gameOver === true) {
+                    
+                }
+            }
+        });
+    }
+}
+*/
+
 export function hitTest() {
     const row = rows[position.currentRow - 1];
     if (!row) return;
@@ -105,3 +134,32 @@ export function hitTest() {
         });
     }
 }
+
+function gameOver() {
+    isGameOver = true;
+
+    if (resultDOM) resultDOM.style.visibility = "visible";
+
+    // Ensure position and currentRow exist before accessing them
+    if (finalScoreDOM && position?.currentRow !== undefined) {
+        finalScoreDOM.innerText = position.currentRow.toString();
+    } else {
+        finalScoreDOM.innerText = "0"; // Fallback if position is undefined
+    }
+
+    renderer.setAnimationLoop(null); // Stop animation loop
+}
+
+function handleControls(event) {
+    if (isGameOver) return; // Prevent movement if game is over
+    
+    // Your existing control handling logic here
+}
+
+// Ensure the gameOver button remains functional
+document.getElementById('gameOverButton')?.addEventListener('click', () => {
+    if (isGameOver) {
+        // Restart game or handle game over button press
+        console.log('Game Over button pressed.');
+    }
+});

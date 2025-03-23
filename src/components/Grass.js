@@ -7,7 +7,7 @@ export function Grass(rowIndex) {
 
     const foundation = new THREE.Mesh(
         new THREE.BoxGeometry(tilesPerRow * tileSize, tileSize, 3),
-        new THREE.MeshLambertMaterial({ color: "#00ff00" })
+        new THREE.MeshLambertMaterial({ color: "red" })
     );
     foundation.position.z = 1.5;
     foundation.receiveShadow = true;
