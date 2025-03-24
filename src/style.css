@@ -22,7 +22,7 @@ body {
   visibility: hidden;
   transform: translate(-50%, -50%);
   pointer-events: none;
-  width: 70%;
+  width: 90%;
 }
 
 #result {
