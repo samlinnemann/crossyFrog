@@ -2,11 +2,15 @@ import { queueMove } from "./components/Player";
 
 // Prevent scrolling when swiping
 document.addEventListener("touchstart", (event) => {
-    event.preventDefault();
+    if (event.target.id !== "retry") {
+        event.preventDefault();
+    }
 }, { passive: false });
 
 document.addEventListener("touchmove", (event) => {
-    event.preventDefault();
+    if (event.target.id !== "retry") {
+        event.preventDefault();
+    }
 }, { passive: false });
 
 // Keyboard Controls
@@ -31,20 +35,28 @@ let touchStartX = 0;
 let touchStartY = 0;
 let touchEndX = 0;
 let touchEndY = 0;
+let isTouchOnButton = false;
 
 window.addEventListener("touchstart", (event) => {
-    if (event.touches.length === 1) {
+    // Check if touch is on retry button
+    isTouchOnButton = event.target.id === "retry";
+    
+    if (!isTouchOnButton && event.touches.length === 1) {
         touchStartX = event.touches[0].clientX;
         touchStartY = event.touches[0].clientY;
     }
 });
 
 window.addEventListener("touchend", (event) => {
-    if (event.changedTouches.length === 1) {
+    // Don't process game controls if the touch started on a button
+    if (!isTouchOnButton && event.changedTouches.length === 1) {
         touchEndX = event.changedTouches[0].clientX;
         touchEndY = event.changedTouches[0].clientY;
         handleGesture();
     }
+    
+    // Reset the flag
+    isTouchOnButton = false;
 });
 
 function handleGesture() {
