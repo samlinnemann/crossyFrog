@@ -62,9 +62,7 @@ function initializeGame() {
     if (resultDOM) resultDOM.style.visibility = "hidden";
 
     if (newHighScoreDOM) newHighScoreDOM.style.display = "none";
-
-    disableUserInput();
-
+    
     renderer.setAnimationLoop(() => {
         isGameOver = false;
         animate();
@@ -145,9 +143,3 @@ document.getElementById("gameOverButton")?.addEventListener("click", () => {
     }
 });
 
-function disableUserInput() {
-    document.body.style.pointerEvents = "none";
-    setTimeout(() => {
-        document.body.style.pointerEvents = "auto";
-    }, 500);
-}

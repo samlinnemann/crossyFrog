@@ -21,11 +21,7 @@ export function initializeMap() {
         const grass = Grass(rowIndex);
         map.add(grass);
     }
-
-    // Add an additional grass row in front of the player
-    const frontGrass = Grass(1);
-    map.add(frontGrass);
-
+    
     addRows();
 }
 
