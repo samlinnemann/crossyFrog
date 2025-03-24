@@ -8,7 +8,6 @@ import { animateVehicles } from "./animateVehicles";
 import { animatePlayer } from "./animatePlayer";
 import { metadata as rows } from "./components/map";
 import { position } from "./components/Player";
-//import { hitTest } from "./hitTest";
 import "./style.css";
 import "./collectUserInput";
 
@@ -29,45 +28,50 @@ player.add(camera);
 const scoreDOM = document.getElementById("score");
 const resultDOM = document.getElementById("result-container");
 const finalScoreDOM = document.getElementById("final-score");
-let isGameOver = false; // Track game state
+
+// 🔧 Added for high score UI
+const highScoreDOM = document.getElementById("high-score");
+const newHighScoreDOM = document.getElementById("new-highscore");
+
+let isGameOver = false;
 const renderer = Renderer();
 renderer.setAnimationLoop(animate);
 
 initializeGame();
 
 const retryButton = document.querySelector("#retry");
-
 if (retryButton) {
     retryButton.addEventListener("click", (e) => {
-        e.preventDefault(); // Prevent lingering touch event
+        e.preventDefault();
         initializeGame();
     });
     retryButton.addEventListener("touchstart", (e) => {
-        e.preventDefault(); // Prevent touch triggering unintended movement
+        e.preventDefault();
         initializeGame();
     });
 }
 
 function initializeGame() {
-    isGameOver = false; // Reset game state first
+    isGameOver = false;
     initializePlayer();
     initializeMap();
 
-    // Ensure UI is reset
     if (scoreDOM) scoreDOM.innerText = "0";
     if (resultDOM) resultDOM.style.visibility = "hidden";
 
+    // 🔧 Hide "NEW HIGH SCORE!" on restart
+    if (newHighScoreDOM) newHighScoreDOM.style.display = "none";
+
     disableUserInput();
-    
-    // Restart animation loop
+
     renderer.setAnimationLoop(() => {
-        isGameOver = false; // Ensure game is running
+        isGameOver = false;
         animate();
     });
 }
 
 function animate() {
-    if (isGameOver) return; // Stop game updates if game over
+    if (isGameOver) return;
 
     animateVehicles();
     animatePlayer();
@@ -102,29 +106,33 @@ function gameOver() {
 
     if (resultDOM) resultDOM.style.visibility = "visible";
 
-    // Ensure position and currentRow exist before accessing them
-    if (finalScoreDOM && position?.currentRow !== undefined) {
-        finalScoreDOM.innerText = position.currentRow.toString();
+    const score = position?.currentRow ?? 0;
+
+    if (finalScoreDOM) finalScoreDOM.innerText = score.toString();
+
+    // 🔧 High score logic
+    const storedHighScore = parseInt(localStorage.getItem("highScore") || "0", 10);
+    if (score > storedHighScore) {
+        localStorage.setItem("highScore", score.toString());
+        if (highScoreDOM) highScoreDOM.innerText = score.toString();
+        if (newHighScoreDOM) newHighScoreDOM.style.display = "block";
     } else {
-        finalScoreDOM.innerText = "0"; // Fallback if position is undefined
+        if (highScoreDOM) highScoreDOM.innerText = storedHighScore.toString();
+        if (newHighScoreDOM) newHighScoreDOM.style.display = "none";
     }
 
-    renderer.setAnimationLoop(null); // Stop animation loop
+    renderer.setAnimationLoop(null);
 }
 
-// Ensure the gameOver button remains functional
-document.getElementById('gameOverButton')?.addEventListener('click', () => {
+document.getElementById("gameOverButton")?.addEventListener("click", () => {
     if (isGameOver) {
-        // Restart game or handle game over button press
-        console.log('Game Over button pressed.');
+        console.log("Game Over button pressed.");
     }
 });
 
-// Disable input for a brief period after restart
 function disableUserInput() {
-    document.body.style.pointerEvents = "none"; // Temporarily disable interactions
-
+    document.body.style.pointerEvents = "none";
     setTimeout(() => {
-        document.body.style.pointerEvents = "auto"; // Re-enable after 500ms
-    }, 500); // Adjust duration as needed
+        document.body.style.pointerEvents = "auto";
+    }, 500);
 }
