@@ -29,7 +29,6 @@ const scoreDOM = document.getElementById("score");
 const resultDOM = document.getElementById("result-container");
 const finalScoreDOM = document.getElementById("final-score");
 
-// 🔧 Added for high score UI
 const highScoreDOM = document.getElementById("high-score");
 const newHighScoreDOM = document.getElementById("new-highscore");
 
@@ -56,10 +55,12 @@ function initializeGame() {
     initializePlayer();
     initializeMap();
 
-    if (scoreDOM) scoreDOM.innerText = "0";
+    if (scoreDOM) {
+        scoreDOM.innerText = "0";
+        scoreDOM.style.display = "block";
+    }
     if (resultDOM) resultDOM.style.visibility = "hidden";
 
-    // 🔧 Hide "NEW HIGH SCORE!" on restart
     if (newHighScoreDOM) newHighScoreDOM.style.display = "none";
 
     disableUserInput();
@@ -104,14 +105,28 @@ export function hitTest() {
 function gameOver() {
     isGameOver = true;
 
-    if (resultDOM) resultDOM.style.visibility = "visible";
+    if (scoreDOM) scoreDOM.style.display = "none";
+
+    if (!resultDOM || !finalScoreDOM) return;
+
+    const vector = new THREE.Vector3();
+    player.getWorldPosition(vector);
+    vector.project(camera);
+
+    const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+    const y = (-(vector.y * 0.5) + 0.5) * window.innerHeight;
+
+    resultDOM.style.visibility = "visible";
+    resultDOM.style.left = `${x}px`;
+    resultDOM.style.top = `${y}px`;
 
     const score = position?.currentRow ?? 0;
+    finalScoreDOM.innerText = score.toString();
 
-    if (finalScoreDOM) finalScoreDOM.innerText = score.toString();
-
-    // 🔧 High score logic
     const storedHighScore = parseInt(localStorage.getItem("highScore") || "0", 10);
+    const highScoreDOM = document.getElementById("high-score");
+    const newHighScoreDOM = document.getElementById("new-highscore");
+
     if (score > storedHighScore) {
         localStorage.setItem("highScore", score.toString());
         if (highScoreDOM) highScoreDOM.innerText = score.toString();
