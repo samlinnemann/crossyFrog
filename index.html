@@ -3,6 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Vite App</title>
   </head>
@@ -11,9 +12,11 @@
     <div id="score">0</div>
     <div id="result-container">
       <div id="result">
-        <h1>GAME OVER</h1>
-        <p>Your Score: <span id="final-score"></span></p>
-        <button id="retry">Play Again</button>
+        <h1 class="arcade-title">GAME OVER</h1>
+        <p class="arcade-score">Your Score: <span id="final-score"></span></p>
+        <p class="arcade-highscore">High Score: <span id="high-score">0</span></p>
+        <p id="new-highscore" class="new-highscore">NEW HIGH SCORE!</p>
+        <button id="retry" class="arcade-button">Play Again</button>
       </div>
     </div>
     <script type="module" src="/src/main.js"></script>

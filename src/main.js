@@ -8,7 +8,6 @@ import { animateVehicles } from "./animateVehicles";
 import { animatePlayer } from "./animatePlayer";
 import { metadata as rows } from "./components/map";
 import { position } from "./components/Player";
-//import { hitTest } from "./hitTest";
 import "./style.css";
 import "./collectUserInput";
 
@@ -29,37 +28,51 @@ player.add(camera);
 const scoreDOM = document.getElementById("score");
 const resultDOM = document.getElementById("result-container");
 const finalScoreDOM = document.getElementById("final-score");
-let isGameOver = false; // Track game state
+
+const highScoreDOM = document.getElementById("high-score");
+const newHighScoreDOM = document.getElementById("new-highscore");
+
+let isGameOver = false;
 const renderer = Renderer();
 renderer.setAnimationLoop(animate);
 
 initializeGame();
 
 const retryButton = document.querySelector("#retry");
-
 if (retryButton) {
-    retryButton.addEventListener("click", initializeGame);
-    retryButton.addEventListener("touchend", initializeGame);
+    retryButton.addEventListener("click", (e) => {
+        e.preventDefault();
+        initializeGame();
+    });
+    retryButton.addEventListener("touchstart", (e) => {
+        e.preventDefault();
+        initializeGame();
+    });
 }
 
 function initializeGame() {
-    isGameOver = false; // Reset game state first
+    isGameOver = false;
     initializePlayer();
     initializeMap();
 
-    // Ensure UI is reset
-    if (scoreDOM) scoreDOM.innerText = "0";
+    if (scoreDOM) {
+        scoreDOM.innerText = "0";
+        scoreDOM.style.display = "block";
+    }
     if (resultDOM) resultDOM.style.visibility = "hidden";
 
-    // Restart animation loop
+    if (newHighScoreDOM) newHighScoreDOM.style.display = "none";
+
+    disableUserInput();
+
     renderer.setAnimationLoop(() => {
-        isGameOver = false; // Ensure game is running
+        isGameOver = false;
         animate();
     });
 }
 
 function animate() {
-    if (isGameOver) return; // Stop game updates if game over
+    if (isGameOver) return;
 
     animateVehicles();
     animatePlayer();
@@ -92,22 +105,49 @@ export function hitTest() {
 function gameOver() {
     isGameOver = true;
 
-    if (resultDOM) resultDOM.style.visibility = "visible";
+    if (scoreDOM) scoreDOM.style.display = "none";
 
-    // Ensure position and currentRow exist before accessing them
-    if (finalScoreDOM && position?.currentRow !== undefined) {
-        finalScoreDOM.innerText = position.currentRow.toString();
+    if (!resultDOM || !finalScoreDOM) return;
+
+    const vector = new THREE.Vector3();
+    player.getWorldPosition(vector);
+    vector.project(camera);
+
+    const x = (vector.x * 0.5 + 0.5) * window.innerWidth;
+    const y = (-(vector.y * 0.5) + 0.5) * window.innerHeight;
+
+    resultDOM.style.visibility = "visible";
+    resultDOM.style.left = `${x}px`;
+    resultDOM.style.top = `${y}px`;
+
+    const score = position?.currentRow ?? 0;
+    finalScoreDOM.innerText = score.toString();
+
+    const storedHighScore = parseInt(localStorage.getItem("highScore") || "0", 10);
+    const highScoreDOM = document.getElementById("high-score");
+    const newHighScoreDOM = document.getElementById("new-highscore");
+
+    if (score > storedHighScore) {
+        localStorage.setItem("highScore", score.toString());
+        if (highScoreDOM) highScoreDOM.innerText = score.toString();
+        if (newHighScoreDOM) newHighScoreDOM.style.display = "block";
     } else {
-        finalScoreDOM.innerText = "0"; // Fallback if position is undefined
+        if (highScoreDOM) highScoreDOM.innerText = storedHighScore.toString();
+        if (newHighScoreDOM) newHighScoreDOM.style.display = "none";
     }
 
-    renderer.setAnimationLoop(null); // Stop animation loop
+    renderer.setAnimationLoop(null);
 }
 
-// Ensure the gameOver button remains functional
-document.getElementById('gameOverButton')?.addEventListener('click', () => {
+document.getElementById("gameOverButton")?.addEventListener("click", () => {
     if (isGameOver) {
-        // Restart game or handle game over button press
-        console.log('Game Over button pressed.');
+        console.log("Game Over button pressed.");
     }
 });
+
+function disableUserInput() {
+    document.body.style.pointerEvents = "none";
+    setTimeout(() => {
+        document.body.style.pointerEvents = "auto";
+    }, 500);
+}
