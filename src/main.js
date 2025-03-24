@@ -38,14 +38,8 @@ initializeGame();
 const retryButton = document.querySelector("#retry");
 
 if (retryButton) {
-    retryButton.addEventListener("click", (e) => {
-        e.preventDefault(); // Prevent lingering touch event
-        initializeGame();
-    });
-    retryButton.addEventListener("touchstart", (e) => {
-        e.preventDefault(); // Prevent touch triggering unintended movement
-        initializeGame();
-    });
+    retryButton.addEventListener("click", initializeGame);
+    retryButton.addEventListener("touchend", initializeGame);
 }
 
 function initializeGame() {
@@ -57,8 +51,6 @@ function initializeGame() {
     if (scoreDOM) scoreDOM.innerText = "0";
     if (resultDOM) resultDOM.style.visibility = "hidden";
 
-    disableUserInput();
-    
     // Restart animation loop
     renderer.setAnimationLoop(() => {
         isGameOver = false; // Ensure game is running
@@ -119,12 +111,3 @@ document.getElementById('gameOverButton')?.addEventListener('click', () => {
         console.log('Game Over button pressed.');
     }
 });
-
-// Disable input for a brief period after restart
-function disableUserInput() {
-    document.body.style.pointerEvents = "none"; // Temporarily disable interactions
-
-    setTimeout(() => {
-        document.body.style.pointerEvents = "auto"; // Re-enable after 500ms
-    }, 500); // Adjust duration as needed
-}

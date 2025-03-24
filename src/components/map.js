@@ -17,10 +17,15 @@ export function initializeMap() {
     map.remove(...map.children);
 
     //add new rows
-    for (let rowIndex = 0; rowIndex > -5; rowIndex--) {
+    for (let rowIndex = 0; rowIndex > -10; rowIndex--) {
         const grass = Grass(rowIndex);
         map.add(grass);
     }
+
+    // Add an additional grass row in front of the player
+    const frontGrass = Grass(1);
+    map.add(frontGrass);
+
     addRows();
 }
 
